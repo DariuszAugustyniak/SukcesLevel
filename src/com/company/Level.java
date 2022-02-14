@@ -1,31 +1,33 @@
 package com.company;
 
+import java.math.BigDecimal;
+
 public class Level {
     int SL;
-    double szansa;
+    BigDecimal szansa;
 
-    public Level(int SL, double szansa) {
+    public Level(int SL, BigDecimal szansa) {
         this.SL = SL;
         this.szansa = szansa;
     }
 
-    public Level(double szansa, int SL) {
+    public Level(BigDecimal szansa, int SL) {
         this.SL = SL;
         this.szansa = szansa;
     }
 
-    void setSzansa(double sza){
+    void setSzansa(BigDecimal sza){
         szansa=sza;
     }
     void setSL(int S){
         SL=S;
     }
-    void set(double sza,int S){
+    void set(BigDecimal sza,int S){
         szansa=sza;
         SL=S;
     }
-    void addSzansa(double sza){
-        szansa=szansa+sza;
+    void addSzansa(BigDecimal sza){
+        szansa=szansa.add(sza);
     }
 
 

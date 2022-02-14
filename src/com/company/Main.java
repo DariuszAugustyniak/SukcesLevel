@@ -8,6 +8,17 @@ public class Main {
         zero.printAll();
         Runda jeden = zero.iteracja(zero);
         jeden.printAll();
+       // jeden.printChanceLagrerThan(4);
+        Runda dwa = jeden.iteracja(jeden);
+        dwa.printChanceLagrerThan(20);
+        dwa.printAll();
+        Runda trzy = dwa.iteracja(dwa);
+        trzy.printChanceLagrerThan(20);
+        trzy.printAll();
+        Runda cztery = trzy.iteracja(trzy);
+
+        cztery.printChanceLagrerThan(20);
+        cztery.printAll();
 	// write your code here
     }
 }
