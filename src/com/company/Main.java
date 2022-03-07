@@ -27,6 +27,9 @@ public class Main {
         pierwsza.podajSLWiekszeOd(3);
         pierwsza.wypełnijEfektyiPS(60,1);
         pierwsza.wypisz();
+        WarstwaSymulacji druga = pierwsza.dodajKolejnąWarstwę(60,1);
+        druga.wypisz();
+        druga.wyspiszSzanse();
        /* WarstwaSymulacji druga = pierwsza.dodajNowąWarstwę();
         druga.wypisz();
         druga.podajSLWiekszeOdProcenty(6);

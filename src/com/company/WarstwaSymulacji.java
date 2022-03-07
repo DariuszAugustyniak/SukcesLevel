@@ -82,11 +82,11 @@ public class WarstwaSymulacji {
                 }
                 else {
                     //zwykła porażka
-                    System.out.println("porażka" + klucz);
-                    if (efektyPS.containsKey(Sl.toString())) {
-                        efektyPS.put(Sl.toString(), efektyPS.get(Sl.toString()) + warstwa.get(klucz));
+                    System.out.println("zwykłaPorażka" + klucz);
+                    if (efektyPS.containsKey("zwykłaPorażka")) {
+                        efektyPS.put("zwykłaPorażka", efektyPS.get("zwykłaPorażka") + warstwa.get(klucz));
                     }else {
-                        efektyPS.put(Sl.toString(),warstwa.get(klucz));
+                        efektyPS.put("zwykłaPorażka",warstwa.get(klucz));
                     }
                 }
                 }
@@ -121,26 +121,98 @@ public class WarstwaSymulacji {
     }
 
 
-    WarstwaSymulacji dodajNowąWarstwę(){
+    WarstwaSymulacji dodajNowąWarstwę() {
         WarstwaSymulacji nowa = new WarstwaSymulacji();
         nowa.wypełnijPoRówno();
 
-        for (Integer pierwszyKlucz:this.poziomySukcesu.keySet()) {
-            for (Integer drugiKlucz:this.poziomySukcesu.keySet()) {
-                Integer nowyKlucz=pierwszyKlucz+ drugiKlucz;
-                if(nowa.poziomySukcesu.containsKey(nowyKlucz)){
-                    Integer najnowszaWartosć = nowa.poziomySukcesu.get(nowyKlucz)+poziomySukcesu.get(pierwszyKlucz)+poziomySukcesu.get(drugiKlucz);
-                    nowa.poziomySukcesu.put(nowyKlucz,najnowszaWartosć);
-                }else{
-                    Integer najnowszaWartosć = poziomySukcesu.get(pierwszyKlucz)+poziomySukcesu.get(drugiKlucz);
-                    nowa.poziomySukcesu.put(nowyKlucz,najnowszaWartosć);
+        for (Integer pierwszyKlucz : this.poziomySukcesu.keySet()) {
+            for (Integer drugiKlucz : this.poziomySukcesu.keySet()) {
+                Integer nowyKlucz = pierwszyKlucz + drugiKlucz;
+                if (nowa.poziomySukcesu.containsKey(nowyKlucz)) {
+                    Integer najnowszaWartosć = nowa.poziomySukcesu.get(nowyKlucz) + poziomySukcesu.get(pierwszyKlucz) + poziomySukcesu.get(drugiKlucz);
+                    nowa.poziomySukcesu.put(nowyKlucz, najnowszaWartosć);
+                } else {
+                    Integer najnowszaWartosć = poziomySukcesu.get(pierwszyKlucz) + poziomySukcesu.get(drugiKlucz);
+                    nowa.poziomySukcesu.put(nowyKlucz, najnowszaWartosć);
                 }
             }
         }
-    return nowa;
+        return nowa;
+    }
 
+    WarstwaSymulacji dodajKolejnąWarstwę(int szansa, int talent){
+        WarstwaSymulacji nowa = new WarstwaSymulacji();
+        nowa.wypełnijPoRówno();
+        nowa.wypełnijPoziomSukcesu(szansa);
+        nowa.efektyPS.put("krytycznySukces",this.efektyPS.get("krytycznySukces"));
+        nowa.efektyPS.put("krytycznaPorażka",this.efektyPS.get("krytycznaPorażka"));
+        nowa.efektyPS.put("zwykłaPorażka",this.efektyPS.get("zwykłaPorażka"));
+        for (String klucz:efektyPS.keySet()) {
+            if(klucz.equals("krytycznySukces")||klucz.equals("krytycznaPorażka")||klucz.equals("zwykłaPorażka")){
+
+            }
+            else{
+                Integer starySL = Integer.parseInt(klucz);
+                for (Integer wynik:warstwa.keySet()) {
+                    Integer nowySL = (szansa-wynik)/10;
+                    Integer suma=nowySL+starySL;
+                    System.out.println("suma to"+ suma +" wynik to "+wynik);
+                    if (wynik/10==wynik%10||wynik<=5||wynik>95){//jakiś krytyk
+                        if(wynik<=szansa){//krytyczny sukses
+                            nowa.efektyPS.put("krytycznySukces",nowa.efektyPS.get("krytycznySukces")+warstwa.get(wynik));
+
+                        }else{//krytyczna porażka
+                            nowa.efektyPS.put("krytycznaPorażka",nowa.efektyPS.get("krytycznaPorażka")+warstwa.get(wynik));
+
+                        }
+                    }else{//nie krytyk
+                        if(suma.intValue()>0){//sukces
+                            if (nowa.efektyPS.containsKey(suma.toString())){
+                               nowa.efektyPS.put(suma.toString(),nowa.efektyPS.get(suma.toString())+warstwa.get(wynik));
+                            }else{
+                                nowa.efektyPS.put(suma.toString(),warstwa.get(wynik));
+                            }
+                        }else{//porażka
+                            nowa.efektyPS.put("zwykłaPorażka",nowa.efektyPS.get("zwykłaPorażka")+warstwa.get(wynik));
+                        }
+                    }
+
+
+                }
+
+
+            }
+        }
+
+
+
+
+
+        return nowa;
+    }
+
+    Integer SumaEfektów(){
+        Integer suma=0;
+        for (String klucz:efektyPS.keySet()) {
+            suma=suma+efektyPS.get(klucz);
+        }
+        return suma;
+    }
+
+    void wyspiszSzanse(){
+        Integer suma= SumaEfektów();
+        Double sumaProcentów = 0.0;
+        for (String klucz: efektyPS.keySet()) {
+            Double procent= efektyPS.get(klucz).doubleValue()/suma.doubleValue();
+            sumaProcentów = sumaProcentów + procent;
+            System.out.println("szansa na "+ klucz +" to "+procent+"%");
+        }
+        System.out.println("w sumie " + sumaProcentów +"%");
+    }
+    void szansaNaConajmniej(){
 
     }
+
     WarstwaSymulacji dodajNowąWarstwę(WarstwaSymulacji dodatkowa){
         WarstwaSymulacji nowa = new WarstwaSymulacji();
         nowa.wypełnijPoRówno();
