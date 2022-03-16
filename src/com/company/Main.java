@@ -30,6 +30,7 @@ public class Main {
         WarstwaSymulacji druga = pierwsza.dodajKolejnąWarstwę(60,1);
         druga.wypisz();
         druga.wyspiszSzanse();
+        druga.szansaNaConajmniej(7);
        /* WarstwaSymulacji druga = pierwsza.dodajNowąWarstwę();
         druga.wypisz();
         druga.podajSLWiekszeOdProcenty(6);

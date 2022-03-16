@@ -209,8 +209,27 @@ public class WarstwaSymulacji {
         }
         System.out.println("w sumie " + sumaProcentów +"%");
     }
-    void szansaNaConajmniej(){
+    void szansaNaConajmniej(int poziom){
+        Integer suma= SumaEfektów();
+        Integer sumasukcesów= 0;
+        Integer sumaniedostatecznych= 0;
+        for (String klucz: efektyPS.keySet()) {
+            if(klucz.equals("krytycznaPorażka")||klucz.equals("krytycznySukces")||klucz.equals("zwykłaPorażka")){
+                Double procent= efektyPS.get(klucz).doubleValue()/suma.doubleValue();
+                System.out.println("szansa na "+ klucz +" to "+procent+"%");
+            }else{
+                if(Integer.parseInt(klucz)>=poziom){
+                    sumasukcesów = sumasukcesów + efektyPS.get(klucz);
+                }else{
+                    sumaniedostatecznych = sumaniedostatecznych + efektyPS.get(klucz);
+                }
+            }
 
+        }
+        Double procent=sumasukcesów.doubleValue()/suma.doubleValue();
+        Double procent2=sumaniedostatecznych.doubleValue()/suma.doubleValue();
+        System.out.println("szansa na wiecej niż "+ poziom +" to "+procent+"%");
+        System.out.println("szansa kontynuację dalej to "+procent2+"%");
     }
 
     WarstwaSymulacji dodajNowąWarstwę(WarstwaSymulacji dodatkowa){
